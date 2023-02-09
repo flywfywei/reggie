@@ -23,8 +23,8 @@ public class SMSUtils {
     public static void sendMessage (String phoneNumbers, int param) throws ExecutionException, InterruptedException {
         // 配置凭证认证信息，包括 ak、secret、token
         StaticCredentialProvider provider = StaticCredentialProvider.create(Credential.builder()
-                .accessKeyId("LTAI5tD9UHtnehrpU1oyhow8")
-                .accessKeySecret("EthFfcdkCRVo0dBVX8ObynpeRc4rEw")
+                .accessKeyId("<your-accessKeyId>")
+                .accessKeySecret("<your-accessKeySecret")
                 .build());
         AsyncClient client = AsyncClient.builder()
                 .region("cn-hangzhou") // 电信区域代码
