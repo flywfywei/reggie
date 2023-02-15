@@ -10,6 +10,9 @@ import com.wfy.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -72,6 +75,7 @@ public class SetmealController {
      * @return
      */
     @GetMapping("/list")
+    @Cacheable(value = "setmealCache", key = "#setmeal.categoryId")
     public R<List<Setmeal>> list(Setmeal setmeal){
         List<Setmeal> list = setmealService.list(new LambdaQueryWrapper<>(setmeal));
         return R.success(list);
@@ -83,6 +87,7 @@ public class SetmealController {
      * @return
      */
     @DeleteMapping
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> delete(@RequestParam List<Long> ids){
         if (!setmealService.checkIdsStatus(ids)){
             LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
@@ -104,6 +109,7 @@ public class SetmealController {
      */
     @PutMapping
     @Transactional
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> update(@RequestBody SetmealDto setmealDto){
         //保存套餐信息
         setmealService.updateById(setmealDto);
@@ -145,6 +151,7 @@ public class SetmealController {
      * @return
      */
     @PostMapping("/status/{status}")
+    @CacheEvict(value = "setmealCache", allEntries = true)
     public R<String> updateStatus(@PathVariable("status") Integer status, Long[] ids){
         List<Setmeal> setmeals = Arrays.stream(ids).map((item) -> {
             Setmeal setmeal = new Setmeal();
@@ -163,6 +170,7 @@ public class SetmealController {
      */
     @PostMapping
     @Transactional
+    @CacheEvict(value = "setmealCache", key = "#setmealDto.categoryId")
     public R<String> save(@RequestBody SetmealDto setmealDto) {
         setmealService.save(setmealDto);
         List<SetmealDish> dishes = setmealDto.getSetmealDishes();
