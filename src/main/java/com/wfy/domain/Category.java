@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
  * @version 1.0
  */
 @Data
-public class Category {
+public class Category implements Serializable {
     private static final Long serialVersionUID=1L;
     private Long id;
     private Integer type;//类型 1:菜品分类，2:套餐分类

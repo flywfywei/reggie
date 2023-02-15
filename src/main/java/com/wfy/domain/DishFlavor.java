@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @EqualsAndHashCode
-public class DishFlavor {
+public class DishFlavor implements Serializable {
     private static final Long serialVersionUID=1L;
     private Long id;
     private Long dishId;

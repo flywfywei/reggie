@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
  * @version 1.0
  */
 @Data
-public class Employee {
+public class Employee implements Serializable {
     private static final Long serialVersionUID=1L;
     private Long id;
     private String name;

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
  * @version 1.0
  */
 @Data
-public class AddressBook {
+public class AddressBook implements Serializable {
     private static final Long serialVersionUID = 1L;
     private Long id;
     private Long userId;

@@ -2,13 +2,15 @@ package com.wfy.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 用户实体
  * @author wfy
  * @version 1.0
  */
 @Data
-public class User {
+public class User implements Serializable {
     private static final Long serialVersionUID = 1L;
     private Long id;
     private String name;
