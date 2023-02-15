@@ -2,6 +2,7 @@ package com.wfy.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.wfy.domain.Dish;
+import com.wfy.dto.DishDto;
 
 import java.util.List;
 
@@ -22,4 +23,11 @@ public interface DishService extends IService<Dish> {
      * @param id
      */
     void updateDishSetmealStatus(Long id);
+
+    /**
+     * 获取DtoList(带有口味数据)
+     * @param categoryId
+     * @return
+     */
+    List<DishDto> getDtoList(Long categoryId);
 }
