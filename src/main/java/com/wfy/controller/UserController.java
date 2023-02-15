@@ -9,11 +9,13 @@ import com.wfy.utils.SMSUtils;
 import com.wfy.utils.ValidateCodeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户管理
@@ -26,6 +28,8 @@ import java.util.Map;
 public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     /**
      * 获取验证码
      * @param user
@@ -35,7 +39,10 @@ public class UserController {
     public R<String> getValidateCode(@RequestBody User user, HttpSession session){
         int code = ValidateCodeUtils.generateValidateCode(6);
         log.info("{}的验证码是：{}", user.getPhone(), code);
-        session.setAttribute(user.getPhone(), String.valueOf(code));
+        //保存在session中，默认3分钟
+//        session.setAttribute(user.getPhone(), String.valueOf(code));
+        //保存在redis中
+        stringRedisTemplate.opsForValue().set(user.getPhone(), String.valueOf(code),5, TimeUnit.MINUTES);
         try {
             //为手机发送验证码
 //            SMSUtils.sendMessage(user.getPhone(), code);
@@ -56,9 +63,15 @@ public class UserController {
         String phone = user.get("phone");
         String code = user.get("code");
         //比较用户验证码
-        String sessionCode = (String) session.getAttribute(phone);
-        if (sessionCode != null && sessionCode.equals(code)) {
-            session.removeAttribute(phone);
+        //从session中获取正确的验证码
+//        String rightCode = (String) session.getAttribute(phone);
+        //从 redis 中获取正确的验证码
+        String rightCode = stringRedisTemplate.opsForValue().get(phone);
+        if (rightCode != null && rightCode.equals(code)) {
+            //删除 session 中的验证码
+//            session.removeAttribute(phone);
+            //删除 redis 中的验证码
+            stringRedisTemplate.delete(phone);
             //验证成功，判断是否存在该用户
             LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(User::getPhone, phone);
