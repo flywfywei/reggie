@@ -12,6 +12,11 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
+  redis:
+    host: 192.168.32.128
+    port: 6379
+    password: root
+    database: 0
 #  web:
 #    resources:
 #      static-locations: [classpath:/static/backend/**]
